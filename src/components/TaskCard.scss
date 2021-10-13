@@ -1,0 +1,12 @@
+.main-task-card {
+  .card-title {
+    padding-bottom: 2rem;
+  }
+  .input-group-text {
+    min-width: 20%;
+    text-align: center;
+  }
+  &-lastInputGroup {
+    padding-bottom: 1rem;
+  }
+}
