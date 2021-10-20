@@ -6,10 +6,10 @@ import { InputGroup, FormControl, Col, Row, Container } from "react-bootstrap";
 
 import "./SignUp.scss";
 
-import { userRegister } from "../api/api";
+import { userRegister } from "../utils/api";
 
 const SignUp = () => {
-  const { API_PORT } = process.env;
+  // const { API_PORT } = process.env;
 
   const [userData, setUserData] = useState({
     first_name: null,

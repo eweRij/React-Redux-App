@@ -6,7 +6,8 @@ import { InputGroup, FormControl, Col, Row, Container } from "react-bootstrap";
 
 import "./SignUp.scss";
 
-import { userLogin } from "../api/api";
+import { userLogin } from "../utils/api";
+import { removeToken } from "../utils/auth";
 
 const SignIn = () => {
   const [userLoginData, setUserLoginData] = useState({
@@ -27,14 +28,17 @@ const SignIn = () => {
 
   const handleLogin = (e, userData) => {
     e.preventDefault();
-    userLogin(userData).then(() => {
-      console.log("sukces");
-      setUserLoginData({
-        email: "",
-        password: "",
-      });
-      //to ze is logge!
-    });
+    userLogin(userData)
+      .then(() => {
+        console.log("sukces");
+        setIsLogged(true); //to trzeba w reduxa
+        setUserLoginData({
+          email: "",
+          password: "",
+        });
+        //to ze is logge!
+      })
+      .catch((err) => console.log(err));
   };
   return (
     <Container className="auth-container">
@@ -75,6 +79,9 @@ const SignIn = () => {
                   size="md"
                 >
                   Sign in
+                </Button>
+                <Button onClick={removeToken} variant="success" size="md">
+                  Sign out
                 </Button>
               </div>
               <p className="auth-card-footer">
