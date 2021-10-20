@@ -6,21 +6,18 @@ import { InputGroup, FormControl, Col, Row, Container } from "react-bootstrap";
 
 import "./SignUp.scss";
 
-import { userRegister } from "../api/api";
+import { userLogin } from "../api/api";
 
-const SignUp = () => {
-  const { API_PORT } = process.env;
-
-  const [userData, setUserData] = useState({
-    first_name: null,
-    last_name: null,
+const SignIn = () => {
+  const [userLoginData, setUserLoginData] = useState({
     email: "",
     password: "",
   });
+  const [isLogged, setIsLogged] = useState(false);
 
   const handleSetUser = (e) => {
     const { name, value } = e.target;
-    setUserData((prev) => {
+    setUserLoginData((prev) => {
       return {
         ...prev,
         [name]: value,
@@ -28,10 +25,16 @@ const SignUp = () => {
     });
   };
 
-  const handleRegistration = (e, userData) => {
+  const handleLogin = (e, userData) => {
     e.preventDefault();
-    userRegister(userData);
-    setUserData({ first_name: null, last_name: null, email: "", password: "" });
+    userLogin(userData).then(() => {
+      console.log("sukces");
+      setUserLoginData({
+        email: "",
+        password: "",
+      });
+      //to ze is logge!
+    });
   };
   return (
     <Container className="auth-container">
@@ -40,36 +43,17 @@ const SignUp = () => {
           <Card className="auth-card" bg="light">
             <Card.Body>
               <h1>Your Time Planner</h1>
-              <Card.Title>Registration</Card.Title>
+              <Card.Title>Log in</Card.Title>
               <Card.Text>
                 <InputGroup className="mb-3">
-                  <InputGroup.Text>First name</InputGroup.Text>
-                  <FormControl
-                    onChange={handleSetUser}
-                    name="first_name"
-                    type="text"
-                    aria-label="Small"
-                    aria-describedby="inputGroup-sizing-small"
-                  />
-                </InputGroup>
-                <InputGroup className="mb-3">
-                  <InputGroup.Text>Last name</InputGroup.Text>
-                  <FormControl
-                    onChange={handleSetUser}
-                    name="last_name"
-                    type="text"
-                    aria-label="Small"
-                    aria-describedby="inputGroup-sizing-small"
-                  />
-                </InputGroup>
-                <InputGroup className="mb-3">
-                  <InputGroup.Text>E-mail</InputGroup.Text>
+                  <InputGroup.Text>E mail</InputGroup.Text>
                   <FormControl
                     onChange={handleSetUser}
                     name="email"
                     type="email"
                     aria-label="Small"
                     aria-describedby="inputGroup-sizing-small"
+                    value={userLoginData.email}
                   />
                 </InputGroup>
                 <InputGroup className="mb-3">
@@ -80,20 +64,21 @@ const SignUp = () => {
                     type="password"
                     aria-label="Small"
                     aria-describedby="inputGroup-sizing-small"
+                    value={userLoginData.password}
                   />
                 </InputGroup>
               </Card.Text>
               <div className="auth-card-btn-container">
                 <Button
-                  onClick={(e) => handleRegistration(e, userData)}
+                  onClick={(e) => handleLogin(e, userLoginData)}
                   variant="success"
                   size="md"
                 >
-                  Sign up
+                  Sign in
                 </Button>
               </div>
               <p className="auth-card-footer">
-                Already registered?<a href="#"> Sign in here!</a>
+                You don't have account?<a href="#"> Register here!</a>
               </p>
             </Card.Body>
           </Card>
@@ -103,4 +88,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default SignIn;
