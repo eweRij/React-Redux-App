@@ -12,8 +12,8 @@ const AuthLayout = () => {
   console.log(isLogged);
   return (
     <div className="auth-layout-container">
-      {/* <SignUp></SignUp> */}
-      <SignIn></SignIn>
+      <SignUp></SignUp>
+      {/* <SignIn></SignIn> */}
     </div>
 
     // <HashRouter>

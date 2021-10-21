@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { HashRouter, Route, Switch, Link } from "react-router-dom";
 
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
@@ -8,13 +11,23 @@ import "./SignUp.scss";
 
 import { userLogin } from "../utils/api";
 import { removeToken } from "../utils/auth";
+import {
+  selectUserLogged,
+  selectUserData,
+  setLogged,
+  setUserData,
+} from "../features/user/userSlice";
 
 const SignIn = () => {
+  const history = useHistory();
+  const isLogged = useSelector(selectUserLogged);
+  const user = useSelector(selectUserData);
+  const dispatch = useDispatch();
+
   const [userLoginData, setUserLoginData] = useState({
     email: "",
     password: "",
   });
-  const [isLogged, setIsLogged] = useState(false);
 
   const handleSetUser = (e) => {
     const { name, value } = e.target;
@@ -25,21 +38,23 @@ const SignIn = () => {
       };
     });
   };
-
   const handleLogin = (e, userData) => {
     e.preventDefault();
     userLogin(userData)
-      .then(() => {
-        console.log("sukces");
-        setIsLogged(true); //to trzeba w reduxa
+      .then((resp) => {
+        console.log(resp.data);
+        dispatch(setLogged());
+        dispatch(setUserData(resp.data)); //to trzeba w reduxa
         setUserLoginData({
           email: "",
           password: "",
         });
+        history.push("/app");
         //to ze is logge!
       })
       .catch((err) => console.log(err));
   };
+  console.log(isLogged);
   return (
     <Container className="auth-container">
       <Row className="justify-content-md-center">
@@ -80,12 +95,15 @@ const SignIn = () => {
                 >
                   Sign in
                 </Button>
-                <Button onClick={removeToken} variant="success" size="md">
+                {/* <Button onClick={removeToken} variant="success" size="md">
                   Sign out
-                </Button>
+                </Button> */}
               </div>
               <p className="auth-card-footer">
-                You don't have account?<a href="#"> Register here!</a>
+                You don't have account?
+                <a href="/register">
+                  <Link to="/register">Register here!</Link>
+                </a>
               </p>
             </Card.Body>
           </Card>

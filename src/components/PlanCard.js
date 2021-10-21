@@ -13,6 +13,7 @@ import { selectTodo, doneTask, removeTask } from "../features/todos/todosSlice";
 const PlanCard = () => {
   const todosList = useSelector(selectTodo);
   const dispatch = useDispatch();
+  console.log(todosList);
   const handleTaskColor = (importance) => {
     if (parseFloat(importance) === 1) {
       return "danger";
@@ -45,8 +46,8 @@ const PlanCard = () => {
         </Card.Title>
         <Card.Text>
           <ListGroup>
-            {todosList.todos &&
-              todosList.todos.map((todo, id) => {
+            {todosList &&
+              todosList.map((todo, id) => {
                 return (
                   <div className="main-plan-card-listContainer">
                     <Button

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
@@ -10,7 +11,7 @@ import { userRegister } from "../utils/api";
 
 const SignUp = () => {
   // const { API_PORT } = process.env;
-
+  const history = useHistory();
   const [userData, setUserData] = useState({
     first_name: null,
     last_name: null,
@@ -32,6 +33,7 @@ const SignUp = () => {
     e.preventDefault();
     userRegister(userData);
     setUserData({ first_name: null, last_name: null, email: "", password: "" });
+    history.push("/");
   };
   return (
     <Container className="auth-container">
@@ -93,7 +95,7 @@ const SignUp = () => {
                 </Button>
               </div>
               <p className="auth-card-footer">
-                Already registered?<a href="#"> Sign in here!</a>
+                Already registered?<a href="/login"> Sign in here!</a>
               </p>
             </Card.Body>
           </Card>
