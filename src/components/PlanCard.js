@@ -13,6 +13,7 @@ import { selectTodo, doneTask, removeTask } from "../features/todos/todosSlice";
 const PlanCard = () => {
   const todosList = useSelector(selectTodo);
   const dispatch = useDispatch();
+  // const user = useSelector(selectUserData);
   console.log(todosList);
   const handleTaskColor = (importance) => {
     if (parseFloat(importance) === 1) {

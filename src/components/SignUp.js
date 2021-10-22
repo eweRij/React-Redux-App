@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
@@ -8,6 +9,7 @@ import { InputGroup, FormControl, Col, Row, Container } from "react-bootstrap";
 import "./SignUp.scss";
 
 import { userRegister } from "../utils/api";
+import { success_toast, error_toast } from "../utils/styles";
 
 const SignUp = () => {
   // const { API_PORT } = process.env;
@@ -31,12 +33,39 @@ const SignUp = () => {
 
   const handleRegistration = (e, userData) => {
     e.preventDefault();
-    userRegister(userData);
-    setUserData({ first_name: null, last_name: null, email: "", password: "" });
-    history.push("/");
+    // setUserData({
+    //   first_name: null,
+    //   last_name: null,
+    //   email: "",
+    //   password: "",
+    // });
+    userRegister(userData)
+      .then(() => {
+        console.log("tosty");
+        success_toast("New user was created!");
+
+        setUserData({
+          first_name: null,
+          last_name: null,
+          email: "",
+          password: "",
+        });
+        // history.push("/");
+      })
+      .then(() => {
+        history.push("/");
+      })
+      .catch((err) => {
+        if (err.response.status === 400) {
+          error_toast("User with this email already exist :/");
+        } else if (err.response.status === 409) {
+          error_toast("All fields are required!");
+        }
+      });
   };
   return (
     <Container className="auth-container">
+      <ToastContainer />
       <Row className="justify-content-md-center">
         <Col xs lg="6">
           <Card className="auth-card" bg="light">

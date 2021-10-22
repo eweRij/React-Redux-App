@@ -1,6 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-const initialState = { isLogged: false, userData: {} };
+import { removeToken, setToken, getToken } from "../../utils/auth";
+
+const initialState = {
+  isLogged: getToken(),
+  userData: { _id: "", first_name: "", last_name: "", email: "" },
+};
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
@@ -26,10 +31,18 @@ export const userSlice = createSlice({
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
-      return { ...state, isLogged: !state.isLogged };
+      return { ...state, isLogged: getToken() };
     },
     setUserData: (state, action) => {
-      return { ...state, user: action.payload };
+      return {
+        ...state,
+        userData: {
+          _id: action.payload._id,
+          first_name: action.payload.first_name,
+          last_name: action.payload.last_name,
+          email: action.payload.email,
+        },
+      };
     },
   },
   // The `extraReducers` field lets the slice handle actions defined elsewhere,

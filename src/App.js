@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { HashRouter, Route, Switch } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.min.css";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import Layout from "./components/Layout";
@@ -9,12 +10,15 @@ import RegisterLayout from "./components/RegisterLayout";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 
-import { selectUserLogged } from "./features/user/userSlice";
+import { selectUserLogged, selectUserData } from "./features/user/userSlice";
+
+import { getToken, getUser } from "./utils/auth";
 
 function App() {
   const isLogged = useSelector(selectUserLogged);
+  const user = useSelector(selectUserData);
   console.log(isLogged);
-  console.log(localStorage.getItem("token"));
+  console.log(getToken(), getUser(), user);
   return (
     <>
       {isLogged ? (

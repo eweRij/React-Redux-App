@@ -21,23 +21,23 @@ instance.interceptors.request.use((config) => {
   }
 });
 
-instance.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (!axios.isCancel(error)) {
-      if (error.response) {
-        const { data, status, headers } = error.response;
-        toast.error(JSON.stringify({ data, status, headers }, undefined, 2));
-      } else if (error.request) {
-        toast.error(JSON.stringify(error.request, undefined, 2));
-      } else {
-        toast.error(JSON.stringify(error.message, undefined, 2));
-      }
-    }
+// instance.interceptors.response.use(
+//   (response) => response,
+//   (error) => {
+//     if (!axios.isCancel(error)) {
+//       if (error.response) {
+//         const { data, status, headers } = error.response;
+//         toast.error(JSON.stringify({ data, status, headers }, undefined, 2));
+//       } else if (error.request) {
+//         toast.error(JSON.stringify(error.request, undefined, 2));
+//       } else {
+//         toast.error(JSON.stringify(error.message, undefined, 2));
+//       }
+//     }
 
-    return Promise.reject(error);
-  }
-);
+//     return Promise.reject(error);
+//   }
+// );
 
 // export const getCanceller = () => axios.CancelToken.source();
 

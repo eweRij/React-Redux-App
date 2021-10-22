@@ -1,7 +1,7 @@
 import axios from "./axios";
 
-export const userRegister = (user) => {
-  axios.post(`/register`, user);
+export const userRegister = async (user) => {
+  await axios.post(`/register`, user);
 };
 
 export const userLogin = (user) => {
@@ -14,7 +14,11 @@ export const userLogin = (user) => {
       })
       .catch((err) => {
         console.log("reject");
-        reject(new Error(err));
+        reject(err);
       });
   });
 }; //jesli bez type scrip to musi byc tu ze promise:/
+
+// export const userLogin = async (user) => {
+//   await axios.post(`/login`, user).then((resp) => resp.data);
+// };

@@ -10,7 +10,7 @@ import Container from "react-bootstrap/Container";
 import "./Navigation.scss";
 
 import { selectUserLogged, setLogged } from "../features/user/userSlice";
-import { removeToken } from "../utils/auth";
+import { removeToken, removeUser } from "../utils/auth";
 
 const Navigation = () => {
   const history = useHistory();
@@ -19,6 +19,7 @@ const Navigation = () => {
 
   const handleSignOut = () => {
     removeToken();
+    removeUser();
     dispatch(setLogged());
     history.push("/");
 
@@ -27,12 +28,12 @@ const Navigation = () => {
   return (
     <Navbar bg="light" expand="lg" variant="light" sticky="top">
       <Container>
-        <Navbar.Brand href="#home">Your Time Organiser</Navbar.Brand>
+        <Navbar.Brand href="#app">Your Time Organiser</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className="nav-container-custom">
           <Nav>
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#link">User Profile</Nav.Link>
+            <Nav.Link href="#app">Home</Nav.Link>
+            <Nav.Link href="#link">Your Profile</Nav.Link>
             <Nav.Link onClick={handleSignOut} href="/">
               Log out
             </Nav.Link>
