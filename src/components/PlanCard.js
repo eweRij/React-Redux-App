@@ -13,8 +13,7 @@ import { selectTodo, doneTask, removeTask } from "../features/todos/todosSlice";
 const PlanCard = () => {
   const todosList = useSelector(selectTodo);
   const dispatch = useDispatch();
-  // const user = useSelector(selectUserData);
-  console.log(todosList);
+
   const handleTaskColor = (importance) => {
     if (parseFloat(importance) === 1) {
       return "danger";
@@ -33,7 +32,7 @@ const PlanCard = () => {
     e.preventDefault();
     dispatch(removeTask(el));
   };
-  console.log(todosList);
+
   return (
     <Card style={{ width: "80%" }} className="main-plan-card">
       <Card.Body>

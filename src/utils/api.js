@@ -17,8 +17,4 @@ export const userLogin = (user) => {
         reject(err);
       });
   });
-}; //jesli bez type scrip to musi byc tu ze promise:/
-
-// export const userLogin = async (user) => {
-//   await axios.post(`/login`, user).then((resp) => resp.data);
-// };
+}; //jesli bez type scrip to musi byc tu ze promise:/?

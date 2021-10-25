@@ -1,20 +1,19 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
-import NavItem from "react-bootstrap/NavItem";
 import Container from "react-bootstrap/Container";
+
+import { setLogged } from "../features/user/userSlice";
+import { removeToken, removeUser } from "../utils/auth";
+import { success_toast } from "../utils/toast";
 
 import "./Navigation.scss";
 
-import { selectUserLogged, setLogged } from "../features/user/userSlice";
-import { removeToken, removeUser } from "../utils/auth";
-
 const Navigation = () => {
   const history = useHistory();
-  const isLogged = useSelector(selectUserLogged);
   const dispatch = useDispatch();
 
   const handleSignOut = () => {
@@ -22,8 +21,7 @@ const Navigation = () => {
     removeUser();
     dispatch(setLogged());
     history.push("/");
-
-    console.log(isLogged);
+    success_toast("You were successfully logged out!");
   };
   return (
     <Navbar bg="light" expand="lg" variant="light" sticky="top">

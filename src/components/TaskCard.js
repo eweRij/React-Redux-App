@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
 
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { InputGroup, FormControl, Form, Col, Row } from "react-bootstrap";
 
-import "./TaskCard.scss";
-
-import { addTask, selectTodo } from "../features/todos/todosSlice";
-import { selectUserData } from "../features/user/userSlice";
+import { addTask } from "../features/todos/todosSlice";
 import { getUser } from "../utils/auth";
+
+import "./TaskCard.scss";
 
 const TaskCard = () => {
   const dispatch = useDispatch();
-  const todosList = useSelector(selectTodo);
   const user = getUser();
   const randomId = Math.floor(Math.random() * 100000) + 1;
+
   const [taskData, setTaskData] = useState({
     id: "",
     category: "",
@@ -24,7 +22,9 @@ const TaskCard = () => {
     importance: "",
     done: false,
   });
+
   const [btnDisabled, setBtnDisabled] = useState(true);
+
   const handleTaskData = (event) => {
     event.preventDefault();
     const { name, value } = event.target;
@@ -46,7 +46,6 @@ const TaskCard = () => {
   const handleTaskList = (event) => {
     event.preventDefault(); //tu trzeba warningi wmontowac
     dispatch(addTask(taskData));
-    toast.success(`Successfully logged!`);
     setTaskData({
       id: "",
       category: "",
@@ -55,13 +54,11 @@ const TaskCard = () => {
       done: false,
     });
     setBtnDisabled(true);
-    console.log(taskData);
   };
   return (
     <Row>
       <Col>
         <Card style={{ width: "80%" }} className="main-task-card">
-          {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
           <Card.Body>
             <Card.Title>
               Hi {user.first_name}! Create your task to do:
@@ -91,17 +88,6 @@ const TaskCard = () => {
                 />
               </InputGroup>
               <br />
-              {/* <InputGroup className="mb-3 main-task-card-lastInputGroup">
-                <InputGroup.Text>Importance</InputGroup.Text>
-                <FormControl
-                  onChange={handleTaskData}
-                  type="text"
-                  name="importance"
-                  value={taskData.importance}
-                  aria-label="Default"
-                  aria-describedby="inputGroup-sizing-default"
-                />
-              </InputGroup> */}
               <Form.Select
                 name="importance"
                 onChange={handleTaskData}

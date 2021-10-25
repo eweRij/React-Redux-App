@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { HashRouter, Route, Switch, Link } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
@@ -11,32 +10,18 @@ import { InputGroup, FormControl, Col, Row, Container } from "react-bootstrap";
 import "./SignUp.scss";
 
 import { userLogin } from "../utils/api";
-import { success_toast, error_toast } from "../utils/styles";
-import {
-  removeToken,
-  setToken,
-  getToken,
-  setUser,
-  getUser,
-} from "../utils/auth";
-import {
-  selectUserLogged,
-  selectUserData,
-  setLogged,
-  setUserData,
-} from "../features/user/userSlice";
+import { success_toast, error_toast } from "../utils/toast";
+import { setToken, setUser } from "../utils/auth";
+import { setLogged, setUserData } from "../features/user/userSlice";
 
 const SignIn = () => {
   const history = useHistory();
-  const isLogged = useSelector(selectUserLogged);
-
   const dispatch = useDispatch();
 
   const [userLoginData, setUserLoginData] = useState({
     email: "",
     password: "",
   });
-  const user = useSelector(selectUserData);
 
   const handleSetUser = (e) => {
     const { name, value } = e.target;
@@ -47,22 +32,21 @@ const SignIn = () => {
       };
     });
   };
+
   const handleLogin = (e, userData) => {
     e.preventDefault();
     userLogin(userData)
       .then((resp) => {
-        console.log(resp.data);
         dispatch(setUserData(resp.data));
         setToken(resp.data.token);
         dispatch(setLogged());
-        setUser(resp.data); //to trzeba w reduxa
-        console.log(getUser(user));
+        setUser(resp.data);
         setUserLoginData({
           email: "",
           password: "",
         });
         history.push("/app");
-        //to ze is logge!
+        success_toast("Successfully logged!");
       })
       .catch((err) => {
         setUserLoginData({
@@ -76,14 +60,11 @@ const SignIn = () => {
         }
       });
   };
-  console.log(isLogged, getToken());
 
-  console.log(getUser());
   return (
     <Container className="auth-container">
       <Row className="justify-content-md-center">
         <Col xs lg="6">
-          <ToastContainer />
           <Card className="auth-card" bg="light">
             <Card.Body>
               <h1>Your Time Planner</h1>
@@ -120,9 +101,6 @@ const SignIn = () => {
                 >
                   Sign in
                 </Button>
-                {/* <Button onClick={removeToken} variant="success" size="md">
-                  Sign out
-                </Button> */}
               </div>
               <p className="auth-card-footer">
                 You don't have account?
