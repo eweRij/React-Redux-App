@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { InputGroup, FormControl, Form, Col, Row } from "react-bootstrap";
 
-import { addTask } from "../features/todos/todosSlice";
-import { getUser } from "../utils/auth";
-
+import { addTask, fetchTasks } from "../features/todos/todosSlice";
+import { selectUserData } from "../features/user/userSlice";
 import "./TaskCard.scss";
 
 const TaskCard = () => {
+  const user = useSelector(selectUserData);
   const dispatch = useDispatch();
-  const user = getUser();
   const randomId = Math.floor(Math.random() * 100000) + 1;
-
   const [taskData, setTaskData] = useState({
     id: "",
     category: "",
@@ -37,15 +35,19 @@ const TaskCard = () => {
     });
   };
   useEffect(() => {
+    dispatch(fetchTasks(user._id));
+  }, []);
+  useEffect(() => {
     taskData.category !== "" &&
       taskData.description !== "" &&
       taskData.importance !== "" &&
       setBtnDisabled(false);
   }, [taskData]);
 
-  const handleTaskList = (event) => {
-    event.preventDefault(); //tu trzeba warningi wmontowac
-    dispatch(addTask(taskData));
+  const handleTaskList = (event, id, task) => {
+    // event.preventDefault();
+    dispatch(fetchTasks(user._id));
+    dispatch(addTask({ id, task }));
     setTaskData({
       id: "",
       category: "",
@@ -104,7 +106,9 @@ const TaskCard = () => {
             <div className="d-grid gap-2">
               <Button
                 disabled={btnDisabled}
-                onClick={handleTaskList}
+                onClick={(e) => {
+                  handleTaskList(e, user._id, taskData);
+                }}
                 variant="warning"
                 size="lg"
               >

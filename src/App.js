@@ -11,7 +11,7 @@ import { selectUserLogged } from "./features/user/userSlice";
 
 function App() {
   const isLogged = useSelector(selectUserLogged);
-
+  console.log(isLogged);
   return (
     <>
       <ToastContainer />

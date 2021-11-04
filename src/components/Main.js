@@ -7,7 +7,6 @@ import TaskCard from "./TaskCard.js";
 import PlanCard from "./PlanCard.js";
 
 import "./Main.scss";
-
 const Main = () => {
   return (
     <div className="main-container">

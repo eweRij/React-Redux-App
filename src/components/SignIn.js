@@ -11,8 +11,8 @@ import "./SignUp.scss";
 
 import { userLogin } from "../utils/api";
 import { success_toast, error_toast } from "../utils/toast";
-import { setToken, setUser } from "../utils/auth";
-import { setLogged, setUserData } from "../features/user/userSlice";
+import { setToken } from "../utils/auth";
+import { setLogged, fetchUser } from "../features/user/userSlice";
 
 const SignIn = () => {
   const history = useHistory();
@@ -37,10 +37,9 @@ const SignIn = () => {
     e.preventDefault();
     userLogin(userData)
       .then((resp) => {
-        dispatch(setUserData(resp.data));
         setToken(resp.data.token);
         dispatch(setLogged());
-        setUser(resp.data);
+        dispatch(fetchUser(resp.data._id));
         setUserLoginData({
           email: "",
           password: "",
@@ -60,7 +59,6 @@ const SignIn = () => {
         }
       });
   };
-
   return (
     <Container className="auth-container">
       <Row className="justify-content-md-center">

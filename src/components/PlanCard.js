@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import Card from "react-bootstrap/Card";
@@ -8,11 +8,24 @@ import { ListGroup, Col } from "react-bootstrap";
 import "./PlanCard.scss";
 import Check from "../assets/Check.svg";
 
-import { selectTodo, doneTask, removeTask } from "../features/todos/todosSlice";
+import {
+  selectTodo,
+  doneTask,
+  removeTask,
+  fetchTasks,
+} from "../features/todos/todosSlice";
+import { selectUserData, fetchUser } from "../features/user/userSlice";
 
 const PlanCard = () => {
-  const todosList = useSelector(selectTodo);
+  const user = useSelector(selectUserData);
+
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchUser(user._id));
+    // dispatch(fetchTasks(user._id));
+  }, []);
+
+  const todosList = useSelector(selectTodo);
 
   const handleTaskColor = (importance) => {
     if (parseFloat(importance) === 1) {
@@ -23,16 +36,19 @@ const PlanCard = () => {
       return "success";
     }
   };
-  const handleDone = (e, id) => {
+  const handleDone = (e, id, user) => {
     e.preventDefault();
-    dispatch(doneTask(id));
+    dispatch(doneTask({ id, user }));
+    dispatch(fetchUser(user._id));
+    dispatch(fetchTasks(user._id));
   };
 
-  const handleRemove = (e, el) => {
+  const handleRemove = (e, id, user) => {
     e.preventDefault();
-    dispatch(removeTask(el));
+    dispatch(removeTask({ id, user }));
+    dispatch(fetchUser(user._id));
+    dispatch(fetchTasks(user._id));
   };
-
   return (
     <Card style={{ width: "80%" }} className="main-plan-card">
       <Card.Body>
@@ -53,7 +69,7 @@ const PlanCard = () => {
                     <Button
                       className="main-plan-card-listContainer-btnDone"
                       variant="info"
-                      onClick={(e) => handleDone(e, id)}
+                      onClick={(e) => handleDone(e, todo.id, user)}
                     >
                       {todo.done === false ? "Done" : "Undone"}
                     </Button>
@@ -80,6 +96,7 @@ const PlanCard = () => {
                             className="main-plan-card-listItem-check-icon"
                             style={{ width: "20px", height: "20px" }}
                             src={Check}
+                            alt="check"
                           ></img>
                         </div>
                       )}
@@ -87,7 +104,7 @@ const PlanCard = () => {
 
                     <Button
                       onClick={(e) => {
-                        handleRemove(e, todo);
+                        handleRemove(e, todo.id, user);
                       }}
                       className="main-plan-card-listContainer-btnRemove"
                       variant="dark"
