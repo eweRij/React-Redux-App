@@ -1,4 +1,7 @@
 .layout-container {
   background: url("../assets/background-yellow.jpg") no-repeat center/cover;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }

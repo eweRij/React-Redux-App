@@ -13,7 +13,7 @@ function App() {
   const isLogged = useSelector(selectUserLogged);
   console.log(isLogged);
   return (
-    <>
+    <div style={{ minHeight: "100vh" }}>
       <ToastContainer />
       {isLogged ? (
         <Layout></Layout>
@@ -25,7 +25,7 @@ function App() {
           </Switch>
         </HashRouter>
       )}
-    </>
+    </div>
   );
 }
 

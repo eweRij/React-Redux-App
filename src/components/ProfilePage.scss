@@ -1,0 +1,20 @@
+.profile-user {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  &-image-container {
+    max-width: 50%;
+    margin-left: 2vw;
+    margin-right: 2vw;
+  }
+  &-data-container {
+    width: 100%;
+  }
+}
+.profile-task-header {
+  margin-top: 2vw;
+  margin-bottom: 2vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

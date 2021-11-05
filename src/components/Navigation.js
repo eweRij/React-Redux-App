@@ -31,7 +31,7 @@ const Navigation = () => {
         <Navbar.Collapse id="basic-navbar-nav" className="nav-container-custom">
           <Nav>
             <Nav.Link href="#app">Home</Nav.Link>
-            <Nav.Link href="#link">Your Profile</Nav.Link>
+            <Nav.Link href="#profile">Your Profile</Nav.Link>
             <Nav.Link onClick={handleSignOut} href="/">
               Log out
             </Nav.Link>
