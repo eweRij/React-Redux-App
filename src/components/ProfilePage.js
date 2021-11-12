@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import path from "path";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import {
@@ -13,66 +14,52 @@ import {
   Container,
   ListGroup,
 } from "react-bootstrap";
+import Avatar from "@material-ui/core/Avatar";
+import IconButton from "@material-ui/core/IconButton";
+import { makeStyles } from "@material-ui/core/styles";
 
 import { addTask, fetchTasks, selectTodo } from "../features/todos/todosSlice";
 import { selectUserData, fetchUser } from "../features/user/userSlice";
-// import Avatar from "./Avatar";
-import Avatar from "../assets/avatar.jpg";
+import { setAvatar, getAvatarFromServer } from "../utils/api";
 import "./ProfilePage.scss";
 
 const ProfilePage = () => {
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      alignSelf: "center",
+      justifyContent: "center",
+      alignItems: "center",
+      display: "flex",
+    },
+    input: {
+      display: "none",
+    },
+    large: {
+      width: "200px",
+      height: "200px",
+    },
+  }));
+
+  const classes = useStyles();
+
   const user = useSelector(selectUserData);
   const todosList = useSelector(selectTodo);
   const dispatch = useDispatch();
-  const randomId = Math.floor(Math.random() * 100000) + 1;
-  const [taskData, setTaskData] = useState({
-    id: "",
-    category: "",
-    description: "",
-    importance: "",
-    done: false,
-  });
-
-  const [btnDisabled, setBtnDisabled] = useState(true);
-
-  const handleTaskData = (event) => {
-    event.preventDefault();
-    const { name, value } = event.target;
-    setTaskData((prevState) => {
-      return {
-        ...prevState,
-        [name]: value,
-        id: randomId,
-      };
+  const [avatar, getAvatar] = useState("");
+  const handleSetAvatar = (e) => {
+    const { files } = e.target;
+    getAvatar(files);
+    setAvatar(user._id, files).then(() => {
+      getAvatarFromServer(user._id).then((res) =>
+        console.log(URL.createObjectURL(new Blob([res.data])))
+      );
     });
-  };
-  useEffect(() => {
-    dispatch(fetchTasks(user._id));
-  }, []);
-  useEffect(() => {
-    taskData.category !== "" &&
-      taskData.description !== "" &&
-      taskData.importance !== "" &&
-      setBtnDisabled(false);
-  }, [taskData]);
-
-  const handleTaskList = (event, id, task) => {
-    // event.preventDefault();
-    dispatch(fetchTasks(user._id));
-    dispatch(addTask({ id, task }));
-    setTaskData({
-      id: "",
-      category: "",
-      description: "",
-      importance: "",
-      done: false,
-    });
-    setBtnDisabled(true);
   };
   useEffect(() => {
     dispatch(fetchUser(user._id));
-    // dispatch(fetchTasks(user._id));
+    dispatch(fetchTasks(user._id));
   }, []);
+
   const handleTaskColor = (importance) => {
     if (parseFloat(importance) === 1) {
       return "danger";
@@ -82,6 +69,8 @@ const ProfilePage = () => {
       return "success";
     }
   };
+  console.log(avatar);
+
   return (
     <Row>
       <Col>
@@ -91,21 +80,32 @@ const ProfilePage = () => {
             <Card.Text>
               <div className="profile-user">
                 <Container className="profile-user-image-container">
-                  <Row>
-                    <Col xs={6} md={4}>
-                      <Image
-                        style={{
-                          backgroundColor: "balck",
-                          width: "300px",
-                          height: "300px",
-                          objectFit: "cover",
-                        }}
-                        src={Avatar}
-                        roundedCircle
-                      />
-                      {/* <Avatar></Avatar> */}
-                    </Col>
-                  </Row>
+                  <div className={classes.root}>
+                    <input
+                      onChange={(e) => {
+                        handleSetAvatar(e);
+                      }}
+                      accept="image/*"
+                      className={classes.input}
+                      id="icon-button-file"
+                      type="file"
+                      enctype="multipart/form-data"
+                      name="avatar"
+                      // value={avatar}
+                    />
+                    <label htmlFor="icon-button-file">
+                      <IconButton
+                        color="primary"
+                        aria-label="upload picture"
+                        component="span"
+                      >
+                        <Avatar
+                          src={avatar && URL.createObjectURL(avatar[0])}
+                          className={classes.large}
+                        />
+                      </IconButton>
+                    </label>
+                  </div>
                 </Container>
                 <div className="profile-user-data-container">
                   <h5>Name : {user.first_name}</h5>
@@ -119,7 +119,6 @@ const ProfilePage = () => {
                   Edit tasks
                 </Button>
               </div>
-
               <ListGroup>
                 {todosList &&
                   todosList.map((todo, id) => {

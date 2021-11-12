@@ -81,3 +81,34 @@ export const deleteTask = (id, user) => {
       });
   });
 };
+export const setAvatar = (userId, avatar) => {
+  return new Promise((resolve, reject) => {
+    const avatarArray = Array.from(avatar);
+    let formData = new FormData();
+    formData.append("avatar", avatarArray[0]);
+    axios
+      .patch(`/user/${userId}/avatar`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((resp) => {
+        resolve(resp);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+export const getAvatarFromServer = (userId) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`/user/${userId}/avatar`)
+      .then((resp) => {
+        resolve(resp);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
