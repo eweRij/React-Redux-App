@@ -100,15 +100,3 @@ export const setAvatar = (userId, avatar) => {
       });
   });
 };
-export const getAvatarFromServer = (userId) => {
-  return new Promise((resolve, reject) => {
-    axios
-      .get(`/user/${userId}/avatar`)
-      .then((resp) => {
-        resolve(resp);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
-};

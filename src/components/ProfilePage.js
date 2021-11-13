@@ -1,64 +1,59 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import path from "path";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-import {
-  InputGroup,
-  FormControl,
-  Form,
-  Col,
-  Row,
-  Image,
-  Container,
-  ListGroup,
-} from "react-bootstrap";
+import { Col, Row, Container, ListGroup } from "react-bootstrap";
+
 import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
 
-import { addTask, fetchTasks, selectTodo } from "../features/todos/todosSlice";
+import { fetchTasks, selectTodo } from "../features/todos/todosSlice";
 import { selectUserData, fetchUser } from "../features/user/userSlice";
-import { setAvatar, getAvatarFromServer } from "../utils/api";
+import { setAvatar } from "../utils/api";
+import { error_toast } from "../utils/toast";
 import "./ProfilePage.scss";
 
-const ProfilePage = () => {
-  const useStyles = makeStyles((theme) => ({
-    root: {
-      alignSelf: "center",
-      justifyContent: "center",
-      alignItems: "center",
-      display: "flex",
-    },
-    input: {
-      display: "none",
-    },
-    large: {
-      width: "200px",
-      height: "200px",
-    },
-  }));
+export const useStyles = makeStyles((theme) => ({
+  root: {
+    alignSelf: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    display: "flex",
+  },
+  input: {
+    display: "none",
+  },
+  large: {
+    width: "200px",
+    height: "200px",
+  },
+}));
 
+const ProfilePage = () => {
   const classes = useStyles();
 
   const user = useSelector(selectUserData);
   const todosList = useSelector(selectTodo);
   const dispatch = useDispatch();
-  const [avatar, getAvatar] = useState("");
-  const handleSetAvatar = (e) => {
-    const { files } = e.target;
-    getAvatar(files);
-    setAvatar(user._id, files).then(() => {
-      getAvatarFromServer(user._id).then((res) =>
-        console.log(URL.createObjectURL(new Blob([res.data])))
-      );
-    });
-  };
   useEffect(() => {
     dispatch(fetchUser(user._id));
     dispatch(fetchTasks(user._id));
   }, []);
+
+  const handleSetAvatar = (e) => {
+    const { files } = e.target;
+    setAvatar(user._id, files)
+      .then(() => {
+        dispatch(fetchUser(user._id));
+      })
+      .catch((err) => {
+        if (err.response.status === 500) {
+          error_toast("File size cannot be larger than 2MB!");
+        }
+      });
+  };
 
   const handleTaskColor = (importance) => {
     if (parseFloat(importance) === 1) {
@@ -69,7 +64,6 @@ const ProfilePage = () => {
       return "success";
     }
   };
-  console.log(avatar);
 
   return (
     <Row>
@@ -91,7 +85,6 @@ const ProfilePage = () => {
                       type="file"
                       enctype="multipart/form-data"
                       name="avatar"
-                      // value={avatar}
                     />
                     <label htmlFor="icon-button-file">
                       <IconButton
@@ -100,7 +93,7 @@ const ProfilePage = () => {
                         component="span"
                       >
                         <Avatar
-                          src={avatar && URL.createObjectURL(avatar[0])}
+                          src={user.avatar && user.avatar}
                           className={classes.large}
                         />
                       </IconButton>

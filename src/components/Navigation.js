@@ -1,12 +1,14 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container";
 
-import { setLogged } from "../features/user/userSlice";
+import Avatar from "@material-ui/core/Avatar";
+
+import { setLogged, selectUserData } from "../features/user/userSlice";
 import { removeToken, removeUser } from "../utils/auth";
 import { success_toast } from "../utils/toast";
 
@@ -15,7 +17,7 @@ import "./Navigation.scss";
 const Navigation = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-
+  const user = useSelector(selectUserData);
   const handleSignOut = () => {
     removeToken();
     removeUser();
@@ -35,6 +37,7 @@ const Navigation = () => {
             <Nav.Link onClick={handleSignOut} href="/">
               Log out
             </Nav.Link>
+            <Avatar src={user.avatar && user.avatar} />
           </Nav>
         </Navbar.Collapse>
       </Container>

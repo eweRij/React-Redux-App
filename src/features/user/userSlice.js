@@ -34,6 +34,7 @@ export const userSlice = createSlice({
           last_name: action.payload.last_name,
           email: action.payload.email,
           tasks: action.payload.tasks,
+          avatar: action.payload.avatar,
         },
       };
     },
