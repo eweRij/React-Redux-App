@@ -1,0 +1,17 @@
+.welcome {
+  .auth-card {
+    padding: 3rem;
+    .card-body {
+      text-align: center;
+      .card-text {
+        text-align: center;
+        h3 {
+          transition: 0.5s;
+        }
+        h3:hover {
+          color: rgba(32, 201, 151, 0.5);
+        }
+      }
+    }
+  }
+}

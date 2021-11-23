@@ -100,3 +100,16 @@ export const setAvatar = (userId, avatar) => {
       });
   });
 };
+
+export const verifyUser = (code) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .patch(`/confirm/${code}`)
+      .then((resp) => {
+        resolve(resp);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};

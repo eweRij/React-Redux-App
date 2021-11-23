@@ -7,6 +7,7 @@ import { ToastContainer } from "react-toastify";
 import Layout from "./components/Layout";
 import AuthLayout from "./components/AuthLayout";
 import RegisterLayout from "./components/RegisterLayout";
+import Welcome from "./components/Welcome";
 import { selectUserLogged } from "./features/user/userSlice";
 
 function App() {
@@ -20,8 +21,9 @@ function App() {
       ) : (
         <HashRouter>
           <Switch>
-            <Route exact path="/" render={() => <AuthLayout />} />
-            <Route exact path="/register" render={() => <RegisterLayout />} />
+            <Route exact path="/" component={AuthLayout} />
+            <Route path="/register" component={RegisterLayout} />
+            <Route path="/confirm/:confirmationCode" component={Welcome} />
           </Switch>
         </HashRouter>
       )}
