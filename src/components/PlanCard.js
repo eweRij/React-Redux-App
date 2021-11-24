@@ -42,8 +42,8 @@ const PlanCard = () => {
     dispatch(fetchUser(user._id));
     dispatch(fetchTasks(user._id));
     dispatch(doneTask({ id, user }));
-    dispatch(fetchUser(user._id));
     dispatch(fetchTasks(user._id));
+    dispatch(fetchUser(user._id));
   };
 
   const handleRemove = (e, id, user) => {

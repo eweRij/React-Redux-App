@@ -11,13 +11,12 @@ import "./SignUp.scss";
 
 import { userLogin } from "../utils/api";
 import { success_toast, error_toast } from "../utils/toast";
-import { setToken } from "../utils/auth";
+import { setToken, getToken } from "../utils/auth";
 import { setLogged, fetchUser } from "../features/user/userSlice";
 
 const SignIn = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-
   const [userLoginData, setUserLoginData] = useState({
     email: "",
     password: "",
@@ -38,6 +37,7 @@ const SignIn = () => {
     userLogin(userData)
       .then((resp) => {
         setToken(resp.data.token);
+        const token = getToken();
         dispatch(setLogged());
         dispatch(fetchUser(resp.data._id));
         setUserLoginData({
