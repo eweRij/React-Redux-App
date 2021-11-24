@@ -6,7 +6,7 @@ import Button from "react-bootstrap/Button";
 import { InputGroup, FormControl, Form, Col, Row } from "react-bootstrap";
 
 import { addTask, fetchTasks } from "../features/todos/todosSlice";
-import { selectUserData } from "../features/user/userSlice";
+import { selectUserData, fetchUser } from "../features/user/userSlice";
 import "./TaskCard.scss";
 
 const TaskCard = () => {
@@ -35,8 +35,10 @@ const TaskCard = () => {
     });
   };
   useEffect(() => {
+    dispatch(fetchUser(user._id));
     dispatch(fetchTasks(user._id));
   }, []);
+
   useEffect(() => {
     taskData.category !== "" &&
       taskData.description !== "" &&
@@ -45,9 +47,11 @@ const TaskCard = () => {
   }, [taskData]);
 
   const handleTaskList = (event, id, task) => {
-    // event.preventDefault();
-    dispatch(fetchTasks(user._id));
+    event.preventDefault();
     dispatch(addTask({ id, task }));
+    dispatch(fetchUser(user._id));
+    dispatch(fetchTasks(user._id));
+
     setTaskData({
       id: "",
       category: "",

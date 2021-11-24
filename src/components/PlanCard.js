@@ -20,9 +20,10 @@ const PlanCard = () => {
   const user = useSelector(selectUserData);
 
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(fetchUser(user._id));
-    // dispatch(fetchTasks(user._id));
+    dispatch(fetchTasks(user._id));
   }, []);
 
   const todosList = useSelector(selectTodo);
@@ -38,6 +39,8 @@ const PlanCard = () => {
   };
   const handleDone = (e, id, user) => {
     e.preventDefault();
+    dispatch(fetchUser(user._id));
+    dispatch(fetchTasks(user._id));
     dispatch(doneTask({ id, user }));
     dispatch(fetchUser(user._id));
     dispatch(fetchTasks(user._id));
