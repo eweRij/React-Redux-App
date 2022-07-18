@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { useSelector } from "react-redux";
 import { HashRouter, Route, Switch } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.min.css";
 import { ToastContainer } from "react-toastify";
@@ -8,22 +8,14 @@ import Layout from "./components/Layout";
 import AuthLayout from "./components/AuthLayout";
 import RegisterLayout from "./components/RegisterLayout";
 import Welcome from "./components/Welcome";
-import {
-  selectUserLogged,
-  selectUserData,
-  setLogged,
-} from "./features/user/userSlice";
-import { clearToken, removeToken } from "./utils/auth";
+import { selectUserLogged, selectUserData } from "./features/user/userSlice";
 
 function App() {
-  const dispatch = useDispatch();
   const isLogged = useSelector(selectUserLogged);
   console.log(isLogged);
   const user = useSelector(selectUserData);
   console.log(user);
-  useEffect(() => {
-    dispatch(setLogged);
-  }, [isLogged]);
+
   return (
     <div style={{ minHeight: "100vh" }}>
       <ToastContainer />

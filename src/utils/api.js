@@ -87,7 +87,7 @@ export const setAvatar = (userId, avatar) => {
     let formData = new FormData();
     formData.append("avatar", avatarArray[0]);
     axios
-      .patch(`/user/${userId}/avatar`, formData, {
+      .patch(`user/${userId}/avatar`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -104,7 +104,7 @@ export const setAvatar = (userId, avatar) => {
 export const verifyUser = (code) => {
   return new Promise((resolve, reject) => {
     axios
-      .patch(`/confirm/${code}`)
+      .patch(`user/confirm/${code}`)
       .then((resp) => {
         resolve(resp);
       })

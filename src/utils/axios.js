@@ -10,6 +10,7 @@ const instance = axios.create({
 
 instance.interceptors.request.use((config) => {
   const token = getToken();
+  console.log(token);
   if (token) {
     return {
       ...config,
